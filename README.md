@@ -9,7 +9,6 @@ THIS PROJECT (INCLUDING ALL INFORMATION AND DATA ASSOCIATED WITH IT) IS "AS IS" 
 Without limiting the foregoing, we want to be really clear that __we are not epidemiologists or doctors, and nothing in this project can or should be taken as medical or other guidance or advice of any kind__. This is merely a conceptual model based on certain parameters and highly simplified. __Guidance or advice concerning Coronavirus, how it is spread, what steps you might take to avoid infection, or anything else health-related should be directed to a competent health professional.__
 
 # About
-
 Shoppers are colored according to their health status:
 * Blue shoppers are healthy (suceptible).
 * Red shoppers are infectious.
