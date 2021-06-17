@@ -112,7 +112,7 @@ public class StoreSimGui : MonoBehaviour
         maxTransactionTimeSlider.maxValue = 10;
         maxTransactionTimeText.text = storeSimulation.MaxPurchaseTime.ToString("0.00");
         timeScaleSlider.value = Time.timeScale;
-        timeScaleText.text = Time.timeScale.ToString("0.00");
+        timeScaleText.text = Time.timeScale.ToString("0") + "x";
     }
 
     // Update is called once per frame
@@ -265,7 +265,7 @@ public class StoreSimGui : MonoBehaviour
     public void OnUpdateTimeScale(float newTimeScale)
     {
         Time.timeScale = timeScaleSlider.value;
-        timeScaleText.text = timeScaleSlider.value.ToString("0.00");
+        timeScaleText.text = timeScaleSlider.value.ToString("0") + "x";
     }
 
     public void OnMouseOverObject(string whichObj)
