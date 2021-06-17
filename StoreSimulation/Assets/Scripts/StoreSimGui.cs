@@ -112,7 +112,8 @@ public class StoreSimGui : MonoBehaviour
         maxTransactionTimeSlider.maxValue = 10;
         maxTransactionTimeText.text = storeSimulation.MaxPurchaseTime.ToString("0.00");
         timeScaleSlider.value = Time.timeScale;
-        timeScaleText.text = Time.timeScale.ToString("0.00");
+        //Format Sim Speed to whole number, affix x to signify multiplier.
+        timeScaleText.text = Time.timeScale.ToString("0") + "x";
     }
 
     // Update is called once per frame
@@ -146,7 +147,7 @@ public class StoreSimGui : MonoBehaviour
         UpdateTimeText();
         storeSimulation.ResetSimulation();
         //SceneManager.LoadScene(0);
-        
+
     }
 
     public void OnNumShoppersChanged()
@@ -173,7 +174,7 @@ public class StoreSimGui : MonoBehaviour
     {
         exposureProbMinDistance = transmissionProbAtZeroDistanceSlider.value;
         transmissionProbAtZeroDistanceText.text = exposureProbMinDistance.ToString("0.00");
-        if(exposureProbMinDistance < transmissionProbAtMaxDistanceSlider.value)
+        if (exposureProbMinDistance < transmissionProbAtMaxDistanceSlider.value)
         {
             transmissionProbAtMaxDistanceSlider.value = exposureProbMinDistance;
         }
@@ -208,7 +209,7 @@ public class StoreSimGui : MonoBehaviour
         minTransactionTime = minTransactionTimeSlider.value;
         minTransactionTimeText.text = minTransactionTime.ToString("0.00");
         maxTransactionTimeSlider.minValue = minTransactionTime;
-        if(maxTransactionTimeSlider.value < minTransactionTime)
+        if (maxTransactionTimeSlider.value < minTransactionTime)
         {
             maxTransactionTimeSlider.value = minTransactionTime;
         }
@@ -221,7 +222,7 @@ public class StoreSimGui : MonoBehaviour
         if (maxTransactionTime > 0.1f)
         {
             minTransactionTimeSlider.maxValue = maxTransactionTime - 0.1f;
-            if(minTransactionTimeSlider.value >= maxTransactionTime)
+            if (minTransactionTimeSlider.value >= maxTransactionTime)
             {
                 minTransactionTimeSlider.value = maxTransactionTime;
             }
@@ -250,7 +251,7 @@ public class StoreSimGui : MonoBehaviour
     public void UpdateExposurePercent()
     {
         var exposedPercent = ((float)exposedCount / (float)(healthyCount + exposedCount)) * 100;
-        if(exposedCount == 0 && healthyCount == 0)
+        if (exposedCount == 0 && healthyCount == 0)
         {
             exposedPercent = 0;
         }
@@ -265,12 +266,13 @@ public class StoreSimGui : MonoBehaviour
     public void OnUpdateTimeScale(float newTimeScale)
     {
         Time.timeScale = timeScaleSlider.value;
-        timeScaleText.text = timeScaleSlider.value.ToString("0.00");
+        //Format Sim Speed to whole number, affix x to signify multiplier.
+        timeScaleText.text = timeScaleSlider.value.ToString("0") + "x";
     }
 
     public void OnMouseOverObject(string whichObj)
     {
-        
+
     }
 
     public void Pause()
