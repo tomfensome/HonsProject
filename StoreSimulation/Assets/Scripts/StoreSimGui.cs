@@ -45,8 +45,8 @@ public class StoreSimGui : MonoBehaviour
     float meterToFoot = 3.28084f;
     float footToMeter = 0.3048f;
     string transmissionProbAtMaxDistanceLabelText = "Exposure Probability at {0} ft";
-    string healthyCustomerCountLabelText = "Number of Healthy Shoppers: {0}";
-    string exposedCustomerCountLabelText = "Number of Exposed Shoppers: {0}";
+    string healthyCustomerCountLabelText = "Number of Healthy People: {0}";
+    string exposedCustomerCountLabelText = "Number of Exposed People: {0}";
     string exposedPercentageLabelText = "Percent Exposed: {0}%";
     string runtimeLabelText = "Running Time: {0} seconds";
 
@@ -255,7 +255,7 @@ public class StoreSimGui : MonoBehaviour
         {
             exposedPercent = 0;
         }
-        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0.00"));
+        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0"));
     }
 
     public void UpdateTimeText()
@@ -279,9 +279,9 @@ public class StoreSimGui : MonoBehaviour
     {
         isPaused = !isPaused;
         if (isPaused)
-        {
+        {           
             timeScale = Time.timeScale;
-            Time.timeScale = 0;
+            Time.timeScale = 0;           
         }
         else
         {
