@@ -36,6 +36,7 @@ public class StoreSimGui : MonoBehaviour
     public TMP_Text timeScaleText;
 
     public Toggle oneWayAislesToggle;
+    public Toggle masksToggle;
 
     public TMP_Text healthyCustomersText;
     public TMP_Text exposedCustomersText;
@@ -62,6 +63,7 @@ public class StoreSimGui : MonoBehaviour
     float exposureProbMaxDistance;
     int numberOfRegisters;
     bool oneWayAisles;
+    bool masks;
     float shopperMoveSpeed;
     float minTransactionTime;
     float maxTransactionTime;
@@ -82,6 +84,7 @@ public class StoreSimGui : MonoBehaviour
         exposureProbMaxDistance = storeSimulation.ExposureProbabilityAtMaxDistance;
         numberOfRegisters = storeSimulation.NumberOfCountersOpen;
         oneWayAisles = storeSimulation.OneWayAisles;
+        masks = storeSimulation.Masks;
         shopperMoveSpeed = storeSimulation.ShopperSpeed;
         minTransactionTime = storeSimulation.MinPurchaseTime;
         maxTransactionTime = storeSimulation.MaxPurchaseTime;
@@ -101,6 +104,7 @@ public class StoreSimGui : MonoBehaviour
         numberOfRegistersSlider.value = storeSimulation.NumberOfCountersOpen;
         numberOfRegistersText.text = storeSimulation.NumberOfCountersOpen.ToString();
         oneWayAislesToggle.isOn = storeSimulation.OneWayAisles;
+        masksToggle.isOn = storeSimulation.Masks;
         shopperMovementSpeedSlider.value = storeSimulation.ShopperSpeed;
         shopperMovementSpeedText.text = storeSimulation.ShopperSpeed.ToString("0.00");
         minTransactionTimeSlider.value = storeSimulation.MinPurchaseTime;
@@ -135,6 +139,7 @@ public class StoreSimGui : MonoBehaviour
         storeSimulation.ExposureProbabilityAtMaxDistance = exposureProbMaxDistance;
         storeSimulation.NumberOfCountersOpen = numberOfRegisters;
         storeSimulation.OneWayAisles = oneWayAisles;
+        storeSimulation.Masks = masks;
         storeSimulation.ShopperSpeed = shopperMoveSpeed;
         storeSimulation.MinPurchaseTime = minTransactionTime;
         storeSimulation.MaxPurchaseTime = maxTransactionTime;
@@ -196,6 +201,11 @@ public class StoreSimGui : MonoBehaviour
     public void OnOneWayAislesToggleChanged(bool val)
     {
         oneWayAisles = oneWayAislesToggle.isOn;
+    }
+
+    public void OnMasksToggleChanged(bool val)
+    {
+        masks = masksToggle.isOn;
     }
 
     public void OnShopperMovementSpeedChanged()
@@ -279,9 +289,9 @@ public class StoreSimGui : MonoBehaviour
     {
         isPaused = !isPaused;
         if (isPaused)
-        {           
+        {
             timeScale = Time.timeScale;
-            Time.timeScale = 0;           
+            Time.timeScale = 0;
         }
         else
         {
