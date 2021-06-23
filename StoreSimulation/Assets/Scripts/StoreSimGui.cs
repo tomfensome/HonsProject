@@ -36,6 +36,7 @@ public class StoreSimGui : MonoBehaviour
     public TMP_Text timeScaleText;
 
     public Toggle oneWayAislesToggle;
+    public Toggle masksToggle;
 
     public TMP_Text healthyCustomersText;
     public TMP_Text exposedCustomersText;
@@ -45,8 +46,8 @@ public class StoreSimGui : MonoBehaviour
     float meterToFoot = 3.28084f;
     float footToMeter = 0.3048f;
     string transmissionProbAtMaxDistanceLabelText = "Exposure Probability at {0} ft";
-    string healthyCustomerCountLabelText = "Number of Healthy Shoppers: {0}";
-    string exposedCustomerCountLabelText = "Number of Exposed Shoppers: {0}";
+    string healthyCustomerCountLabelText = "Number of Healthy People: {0}";
+    string exposedCustomerCountLabelText = "Number of Exposed People: {0}";
     string exposedPercentageLabelText = "Percent Exposed: {0}%";
     string runtimeLabelText = "Running Time: {0} seconds";
 
@@ -62,6 +63,7 @@ public class StoreSimGui : MonoBehaviour
     float exposureProbMaxDistance;
     int numberOfRegisters;
     bool oneWayAisles;
+    bool masks;
     float shopperMoveSpeed;
     float minTransactionTime;
     float maxTransactionTime;
@@ -82,6 +84,7 @@ public class StoreSimGui : MonoBehaviour
         exposureProbMaxDistance = storeSimulation.ExposureProbabilityAtMaxDistance;
         numberOfRegisters = storeSimulation.NumberOfCountersOpen;
         oneWayAisles = storeSimulation.OneWayAisles;
+        masks = storeSimulation.Masks;
         shopperMoveSpeed = storeSimulation.ShopperSpeed;
         minTransactionTime = storeSimulation.MinPurchaseTime;
         maxTransactionTime = storeSimulation.MaxPurchaseTime;
@@ -101,6 +104,7 @@ public class StoreSimGui : MonoBehaviour
         numberOfRegistersSlider.value = storeSimulation.NumberOfCountersOpen;
         numberOfRegistersText.text = storeSimulation.NumberOfCountersOpen.ToString();
         oneWayAislesToggle.isOn = storeSimulation.OneWayAisles;
+        masksToggle.isOn = storeSimulation.Masks;
         shopperMovementSpeedSlider.value = storeSimulation.ShopperSpeed;
         shopperMovementSpeedText.text = storeSimulation.ShopperSpeed.ToString("0.00");
         minTransactionTimeSlider.value = storeSimulation.MinPurchaseTime;
@@ -135,6 +139,7 @@ public class StoreSimGui : MonoBehaviour
         storeSimulation.ExposureProbabilityAtMaxDistance = exposureProbMaxDistance;
         storeSimulation.NumberOfCountersOpen = numberOfRegisters;
         storeSimulation.OneWayAisles = oneWayAisles;
+        storeSimulation.Masks = masks;
         storeSimulation.ShopperSpeed = shopperMoveSpeed;
         storeSimulation.MinPurchaseTime = minTransactionTime;
         storeSimulation.MaxPurchaseTime = maxTransactionTime;
@@ -198,6 +203,11 @@ public class StoreSimGui : MonoBehaviour
         oneWayAisles = oneWayAislesToggle.isOn;
     }
 
+    public void OnMasksToggleChanged(bool val)
+    {
+        masks = masksToggle.isOn;
+    }
+
     public void OnShopperMovementSpeedChanged()
     {
         shopperMoveSpeed = shopperMovementSpeedSlider.value;
@@ -255,7 +265,7 @@ public class StoreSimGui : MonoBehaviour
         {
             exposedPercent = 0;
         }
-        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0.00"));
+        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0"));
     }
 
     public void UpdateTimeText()

@@ -19,6 +19,8 @@ public class StoreSimulation : MonoBehaviour
     public int               DesiredNumInfectious = 1;
     public float             SpawnCooldown = 1.0f;
     public bool              OneWayAisles = true;
+    public bool              Masks = true;
+
 
     [Header("Billing Queue Parameters")]
     public float             MaxPurchaseTime = 3.0f;
