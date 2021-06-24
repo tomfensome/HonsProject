@@ -184,6 +184,7 @@ public class StoreSimGui : MonoBehaviour
 
     public void OnDurationChanged()
     {
+        //Format Duration to whole number, affix mins to signify minutes.
         durationText.text = durationSlider.value.ToString("0") + "mins";
     }
 
