@@ -16,6 +16,7 @@ public class StoreSimGui : MonoBehaviour
     public Slider maxTransmissionDistanceSlider;
     public Slider transmissionProbAtZeroDistanceSlider;
     public Slider transmissionProbAtMaxDistanceSlider;
+    public Slider durationSlider;
     public Slider numberOfRegistersSlider;
     public Slider shopperMovementSpeedSlider;
     public Slider minTransactionTimeSlider;
@@ -26,6 +27,7 @@ public class StoreSimGui : MonoBehaviour
     [FormerlySerializedAs("numContagiousText")]
     public TMP_Text numInfectiousText;
     public TMP_Text maxTransmissionDistanceText;
+    public TMP_Text durationText;
     public TMP_Text transmissionProbAtZeroDistanceText;
     public TMP_Text transmissionProbAtMaxDistanceText;
     public TMP_Text transmissionProbAtMaxDistanceLabel;
@@ -37,6 +39,7 @@ public class StoreSimGui : MonoBehaviour
 
     public Toggle oneWayAislesToggle;
     public Toggle masksToggle;
+    public Toggle vaccineToggle;
 
     public TMP_Text healthyCustomersText;
     public TMP_Text exposedCustomersText;
@@ -64,6 +67,7 @@ public class StoreSimGui : MonoBehaviour
     int numberOfRegisters;
     bool oneWayAisles;
     bool masks;
+    bool vaccine;
     float shopperMoveSpeed;
     float minTransactionTime;
     float maxTransactionTime;
@@ -85,6 +89,7 @@ public class StoreSimGui : MonoBehaviour
         numberOfRegisters = storeSimulation.NumberOfCountersOpen;
         oneWayAisles = storeSimulation.OneWayAisles;
         masks = storeSimulation.Masks;
+        vaccine = storeSimulation.Vaccine;
         shopperMoveSpeed = storeSimulation.ShopperSpeed;
         minTransactionTime = storeSimulation.MinPurchaseTime;
         maxTransactionTime = storeSimulation.MaxPurchaseTime;
@@ -105,6 +110,7 @@ public class StoreSimGui : MonoBehaviour
         numberOfRegistersText.text = storeSimulation.NumberOfCountersOpen.ToString();
         oneWayAislesToggle.isOn = storeSimulation.OneWayAisles;
         masksToggle.isOn = storeSimulation.Masks;
+        vaccineToggle.isOn = storeSimulation.Vaccine;
         shopperMovementSpeedSlider.value = storeSimulation.ShopperSpeed;
         shopperMovementSpeedText.text = storeSimulation.ShopperSpeed.ToString("0.00");
         minTransactionTimeSlider.value = storeSimulation.MinPurchaseTime;
@@ -140,6 +146,7 @@ public class StoreSimGui : MonoBehaviour
         storeSimulation.NumberOfCountersOpen = numberOfRegisters;
         storeSimulation.OneWayAisles = oneWayAisles;
         storeSimulation.Masks = masks;
+        storeSimulation.Vaccine = vaccine;
         storeSimulation.ShopperSpeed = shopperMoveSpeed;
         storeSimulation.MinPurchaseTime = minTransactionTime;
         storeSimulation.MaxPurchaseTime = maxTransactionTime;
@@ -175,6 +182,12 @@ public class StoreSimGui : MonoBehaviour
         transmissionProbAtMaxDistanceLabel.text = string.Format(transmissionProbAtMaxDistanceLabelText, maxTransmissionDistanceSlider.value);
     }
 
+    public void OnDurationChanged()
+    {
+        //Format Duration to whole number, affix mins to signify minutes.
+        durationText.text = durationSlider.value.ToString("0") + "mins";
+    }
+
     public void OnTransmissionProbablityAtMinDistanceChanged()
     {
         exposureProbMinDistance = transmissionProbAtZeroDistanceSlider.value;
@@ -206,6 +219,10 @@ public class StoreSimGui : MonoBehaviour
     public void OnMasksToggleChanged(bool val)
     {
         masks = masksToggle.isOn;
+    }
+    public void OnVaccineToggleChanged(bool val)
+    {
+        vaccine = vaccineToggle.isOn;
     }
 
     public void OnShopperMovementSpeedChanged()

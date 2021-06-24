@@ -6796,13 +6796,13 @@ MonoBehaviour:
   m_MinValue: 1
   m_MaxValue: 60
   m_WholeNumbers: 1
-  m_Value: 3
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8744079159167730067}
         m_TargetAssemblyTypeName: StoreSimGui, Assembly-CSharp
-        m_MethodName: OnMaxTransmissionDistanceChanged
+        m_MethodName: OnDurationChanged
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7006,8 +7006,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8744079159167730067}
         m_TargetAssemblyTypeName: StoreSimGui, Assembly-CSharp
-        m_MethodName: OnOneWayAislesToggleChanged
-        m_Mode: 6
+        m_MethodName: OnVaccineToggleChanged
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7082,7 +7082,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 mins
+  m_text: 1 mins
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7145,7 +7145,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -11.100342, w: 0}
+  m_margin: {x: -7.6418457, y: 0, z: -18.998169, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -9977,7 +9977,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8744079159167730067}
         m_TargetAssemblyTypeName: StoreSimGui, Assembly-CSharp
-        m_MethodName: OnOneWayAislesToggleChanged
+        m_MethodName: OnMasksToggleChanged
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12126,6 +12126,7 @@ MonoBehaviour:
   maxTransmissionDistanceSlider: {fileID: 8744079159011195031}
   transmissionProbAtZeroDistanceSlider: {fileID: 8744079158323097555}
   transmissionProbAtMaxDistanceSlider: {fileID: 8744079158185791200}
+  durationSlider: {fileID: 0}
   numberOfRegistersSlider: {fileID: 5787511529493891550}
   shopperMovementSpeedSlider: {fileID: 371660344}
   minTransactionTimeSlider: {fileID: 2058009052}
@@ -12134,6 +12135,7 @@ MonoBehaviour:
   numShoppersText: {fileID: 892380942179914055}
   numInfectiousText: {fileID: 8744079159716670336}
   maxTransmissionDistanceText: {fileID: 8744079159540892079}
+  durationText: {fileID: 0}
   transmissionProbAtZeroDistanceText: {fileID: 8744079158045331958}
   transmissionProbAtMaxDistanceText: {fileID: 8744079159304014707}
   transmissionProbAtMaxDistanceLabel: {fileID: 8744079159352468367}
@@ -12143,7 +12145,8 @@ MonoBehaviour:
   maxTransactionTimeText: {fileID: 749657063}
   timeScaleText: {fileID: 1905948440}
   oneWayAislesToggle: {fileID: 634570062}
-  masksToggle: {fileID: 0}
+  masksToggle: {fileID: 381369239022379928}
+  vaccineToggle: {fileID: 715351616793612041}
   healthyCustomersText: {fileID: 95250707}
   exposedCustomersText: {fileID: 1622974157}
   exposedPercentageText: {fileID: 705870118}
