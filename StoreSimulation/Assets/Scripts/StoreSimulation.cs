@@ -20,7 +20,7 @@ public class StoreSimulation : MonoBehaviour
     public float             SpawnCooldown = 1.0f;
     public bool              OneWayAisles = true;
     public bool              Masks = true;
-
+    public bool              Vaccine = true;
 
     [Header("Billing Queue Parameters")]
     public float             MaxPurchaseTime = 3.0f;
@@ -328,6 +328,16 @@ public class StoreSimulation : MonoBehaviour
         // length, we need to adjust the probability.
         //   prob = 1 - (1-probPerFrame)^(1/deltaTime)
         // so
+        if (Masks)
+        {
+            prob = (prob / 100) * 65;
+        }
+
+        if (Vaccine)
+        {
+            prob = (prob / 100) * 45;
+        }
+
         var probPerFrame = 1.0f - Mathf.Pow(1.0f - prob, Time.deltaTime);
         return UnityEngine.Random.value < probPerFrame;
     }
