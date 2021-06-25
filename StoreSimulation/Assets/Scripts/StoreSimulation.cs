@@ -331,6 +331,7 @@ public class StoreSimulation : MonoBehaviour
         //   prob = 1 - (1-probPerFrame)^(1/deltaTime)
         // so
 
+        // switch case to alter prob value based on space type
         switch (SpaceType)
         {
             case "Inside (Well Ventilated)":
@@ -343,12 +344,13 @@ public class StoreSimulation : MonoBehaviour
                 break;
         }
 
-
+        //if masks is ticked, reduce probability of exposure
         if (Masks)
         {
             prob = (prob / 100) * 65;
         }
 
+        //if vaccine is ticked, reduce probability of exposure
         if (Vaccine)
         {
             prob = (prob / 100) * 45;
