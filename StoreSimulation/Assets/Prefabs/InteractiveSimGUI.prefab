@@ -4804,7 +4804,7 @@ MonoBehaviour:
   m_MinValue: 1
   m_MaxValue: 0.9
   m_WholeNumbers: 0
-  m_Value: 0.9
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -12126,16 +12126,17 @@ MonoBehaviour:
   maxTransmissionDistanceSlider: {fileID: 8744079159011195031}
   transmissionProbAtZeroDistanceSlider: {fileID: 8744079158323097555}
   transmissionProbAtMaxDistanceSlider: {fileID: 8744079158185791200}
-  durationSlider: {fileID: 0}
+  durationSlider: {fileID: 2915679274105292797}
   numberOfRegistersSlider: {fileID: 5787511529493891550}
   shopperMovementSpeedSlider: {fileID: 371660344}
   minTransactionTimeSlider: {fileID: 2058009052}
   maxTransactionTimeSlider: {fileID: 1278819074}
   timeScaleSlider: {fileID: 1341435695}
+  spaceDropdown: {fileID: 5868479939287108093}
   numShoppersText: {fileID: 892380942179914055}
   numInfectiousText: {fileID: 8744079159716670336}
   maxTransmissionDistanceText: {fileID: 8744079159540892079}
-  durationText: {fileID: 0}
+  durationText: {fileID: 1146784759292256995}
   transmissionProbAtZeroDistanceText: {fileID: 8744079158045331958}
   transmissionProbAtMaxDistanceText: {fileID: 8744079159304014707}
   transmissionProbAtMaxDistanceLabel: {fileID: 8744079159352468367}

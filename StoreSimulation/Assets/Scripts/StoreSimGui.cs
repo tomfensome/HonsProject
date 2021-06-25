@@ -22,6 +22,7 @@ public class StoreSimGui : MonoBehaviour
     public Slider minTransactionTimeSlider;
     public Slider maxTransactionTimeSlider;
     public Slider timeScaleSlider;
+    public Dropdown spaceDropdown;
 
     public TMP_Text numShoppersText;
     [FormerlySerializedAs("numContagiousText")]
@@ -72,6 +73,7 @@ public class StoreSimGui : MonoBehaviour
     float shopperMoveSpeed;
     float minTransactionTime;
     float maxTransactionTime;
+    string spaceType;
 
     bool isPaused = false;
     float timeScale = 0.0f;
@@ -95,6 +97,7 @@ public class StoreSimGui : MonoBehaviour
         shopperMoveSpeed = storeSimulation.ShopperSpeed;
         minTransactionTime = storeSimulation.MinPurchaseTime;
         maxTransactionTime = storeSimulation.MaxPurchaseTime;
+        spaceType = storeSimulation.SpaceType;
 
         numShoppersSlider.value = storeSimulation.DesiredNumShoppers;
         numShoppersText.text = storeSimulation.DesiredNumShoppers.ToString();
@@ -154,6 +157,7 @@ public class StoreSimGui : MonoBehaviour
         storeSimulation.ShopperSpeed = shopperMoveSpeed;
         storeSimulation.MinPurchaseTime = minTransactionTime;
         storeSimulation.MaxPurchaseTime = maxTransactionTime;
+        storeSimulation.SpaceType = spaceType;
         if (isPaused)
         {
             isPaused = false;
@@ -304,6 +308,13 @@ public class StoreSimGui : MonoBehaviour
         timeScaleText.text = timeScaleSlider.value.ToString("0") + "x";
     }
 
+    public void OnSpaceDropdownChanged() 
+    {
+        int index = spaceDropdown.GetComponent<Dropdown>().value;
+        List<Dropdown.OptionData> dropdownOptions = spaceDropdown.GetComponent<Dropdown>().options;
+        spaceType = dropdownOptions[index].text;
+    }
+
     public void OnMouseOverObject(string whichObj)
     {
 
@@ -330,6 +341,6 @@ public class StoreSimGui : MonoBehaviour
         {
             timeScale = Time.timeScale;
             Time.timeScale = 0;
-        }        
+        }
     }
 }

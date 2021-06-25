@@ -22,6 +22,7 @@ public class StoreSimulation : MonoBehaviour
     public bool OneWayAisles = true;
     public bool Masks = true;
     public bool Vaccine = true;
+    public string SpaceType = "Inside (Well Ventilated)";
 
     [Header("Billing Queue Parameters")]
     public float MaxPurchaseTime = 3.0f;
@@ -329,6 +330,20 @@ public class StoreSimulation : MonoBehaviour
         // length, we need to adjust the probability.
         //   prob = 1 - (1-probPerFrame)^(1/deltaTime)
         // so
+
+        switch (SpaceType)
+        {
+            case "Inside (Well Ventilated)":
+                break;
+            case "Inside (Poorly Ventilated)":
+                prob = prob * 2;
+                break;
+            case "Outside":
+                prob = (prob / 100) * 50;
+                break;
+        }
+
+
         if (Masks)
         {
             prob = (prob / 100) * 65;
