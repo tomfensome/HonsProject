@@ -337,27 +337,37 @@ public class StoreSimulation : MonoBehaviour
             case "Inside (Well Ventilated)":
                 break;
             case "Inside (Poorly Ventilated)":
+                //increase probability if space is inside and poorly ventilated
                 prob = prob * 2;
                 break;
             case "Outside":
-                prob = (prob / 100) * 50;
+                //reduce probability if space is outside
+                prob = (prob / 100) * 10;
                 break;
         }
 
         //if masks is ticked, reduce probability of exposure
         if (Masks)
         {
-            prob = (prob / 100) * 65;
+            prob = (prob / 100) * 49;
         }
 
         //if vaccine is ticked, reduce probability of exposure
         if (Vaccine)
         {
-            prob = (prob / 100) * 45;
+            prob = (prob / 100) * 49;
         }
 
         var probPerFrame = 1.0f - Mathf.Pow(1.0f - prob, Time.deltaTime);
-        return UnityEngine.Random.value < probPerFrame;
+        //if probability is too high, return true, else return prob calculation
+        if (float.IsNaN(probPerFrame))
+        {
+            return true;
+        }
+        else
+        {
+            return UnityEngine.Random.value < probPerFrame;
+        }
     }
 
     void MoveQueue()
