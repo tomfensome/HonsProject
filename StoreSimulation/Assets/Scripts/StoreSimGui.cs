@@ -61,6 +61,7 @@ public class StoreSimGui : MonoBehaviour
 
     int numShoppers;
     int numInfectious;
+    float duration;
     float maxTransmissionDistance;
     float exposureProbMinDistance;
     float exposureProbMaxDistance;
@@ -83,6 +84,7 @@ public class StoreSimGui : MonoBehaviour
 
         numShoppers = storeSimulation.DesiredNumShoppers;
         numInfectious = storeSimulation.DesiredNumInfectious;
+        duration = storeSimulation.Duration;
         maxTransmissionDistance = storeSimulation.ExposureDistanceMeters * meterToFoot;
         exposureProbMinDistance = storeSimulation.ExposureProbabilityAtZeroDistance;
         exposureProbMaxDistance = storeSimulation.ExposureProbabilityAtMaxDistance;
@@ -131,6 +133,7 @@ public class StoreSimGui : MonoBehaviour
     {
         secondsSinceStart += Time.deltaTime;
         UpdateTimeText();
+        durationReachedCheck();
     }
 
     public void ResetSim()
@@ -140,6 +143,7 @@ public class StoreSimGui : MonoBehaviour
         exposedCount = 0;
         storeSimulation.DesiredNumShoppers = numShoppers;
         storeSimulation.DesiredNumInfectious = numInfectious;
+        storeSimulation.Duration = duration;
         storeSimulation.ExposureDistanceMeters = maxTransmissionDistance * footToMeter;
         storeSimulation.ExposureProbabilityAtZeroDistance = exposureProbMinDistance;
         storeSimulation.ExposureProbabilityAtMaxDistance = exposureProbMaxDistance;
@@ -157,6 +161,8 @@ public class StoreSimGui : MonoBehaviour
         }
         UpdateExposurePercent();
         UpdateTimeText();
+        durationReachedCheck();
+        Time.timeScale = timeScaleSlider.value;
         storeSimulation.ResetSimulation();
         //SceneManager.LoadScene(0);
 
@@ -184,6 +190,7 @@ public class StoreSimGui : MonoBehaviour
 
     public void OnDurationChanged()
     {
+        duration = durationSlider.value;
         //Format Duration to whole number, affix mins to signify minutes.
         durationText.text = durationSlider.value.ToString("0") + "mins";
     }
@@ -307,6 +314,7 @@ public class StoreSimGui : MonoBehaviour
         isPaused = !isPaused;
         if (isPaused)
         {
+
             timeScale = Time.timeScale;
             Time.timeScale = 0;
         }
@@ -314,5 +322,14 @@ public class StoreSimGui : MonoBehaviour
         {
             Time.timeScale = timeScale;
         }
+    }
+
+    public void durationReachedCheck()
+    {
+        if (storeSimulation.durationCheck(secondsSinceStart))
+        {
+            timeScale = Time.timeScale;
+            Time.timeScale = 0;
+        }        
     }
 }
