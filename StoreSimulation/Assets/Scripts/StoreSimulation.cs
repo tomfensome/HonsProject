@@ -13,17 +13,21 @@ public class StoreSimulation : MonoBehaviour
 
     [FormerlySerializedAs("NumShoppers")]
     [Header("Store Parameters")]
-    public int               DesiredNumShoppers = 10;
-    
+    public int DesiredNumShoppers = 10;
+
     [FormerlySerializedAs("DesiredNumContagious")]
-    public int               DesiredNumInfectious = 1;
-    public float             SpawnCooldown = 1.0f;
-    public bool              OneWayAisles = true;
+    public int DesiredNumInfectious = 1;
+    public float Duration = 1;
+    public float SpawnCooldown = 1.0f;
+    public bool OneWayAisles = true;
+    public bool Masks = true;
+    public bool Vaccine = true;
+    public string SpaceType = "Inside (Well Ventilated)";
 
     [Header("Billing Queue Parameters")]
-    public float             MaxPurchaseTime = 3.0f;
-    public float             MinPurchaseTime = 1.0f;
-    public int               NumberOfCountersOpen = 9;
+    public float MaxPurchaseTime = 3.0f;
+    public float MinPurchaseTime = 1.0f;
+    public int NumberOfCountersOpen = 9;
 
     // Exposure probability parameters.
     // These are given as the probability of a healthy person converting to exposed over the course of one second.
@@ -31,32 +35,32 @@ public class StoreSimulation : MonoBehaviour
     // and modified to account for the timestep.
     [Header("Exposure Parameters")]
     [Range(0.0f, 1.0f)]
-    public float     ExposureProbabilityAtZeroDistance = 0.5f;
+    public float ExposureProbabilityAtZeroDistance = 0.5f;
     [Range(0.0f, 1.0f)]
-    public float     ExposureProbabilityAtMaxDistance = 0.0f;
+    public float ExposureProbabilityAtMaxDistance = 0.0f;
     [Range(0.0f, 10.0f)]
-    public float     ExposureDistanceMeters = 1.8288f; // Six feet in meters
+    public float ExposureDistanceMeters = 1.8288f; // Six feet in meters
 
 
     [Header("Graphics Parameters")]
-    public GameObject        ShopperPrefab;
-    public GameObject[]      Registers;
+    public GameObject ShopperPrefab;
+    public GameObject[] Registers;
 
     [Header("Shopper Parameters")]
-    public float             ShopperSpeed = 1.0f;
+    public float ShopperSpeed = 1.0f;
 
     [HideInInspector]
-    public WaypointNode[]    Waypoints;
+    public WaypointNode[] Waypoints;
     [HideInInspector]
-    public int               BillingQueueCapacity = 4;
-    
-    private List<WaypointNode>         m_Entrances;
-    private WaypointGraph              m_WaypointGraph;
-    private HashSet<Shopper>           m_AllShoppers;
-    private float                      m_SpawnCooldownCounter;
-    private int                        m_NumInfectious;
+    public int BillingQueueCapacity = 4;
+
+    private List<WaypointNode> m_Entrances;
+    private WaypointGraph m_WaypointGraph;
+    private HashSet<Shopper> m_AllShoppers;
+    private float m_SpawnCooldownCounter;
+    private int m_NumInfectious;
     private List<StoreSimulationQueue> m_RegistersQueues = new List<StoreSimulationQueue>();
-    private int                        m_CurrentServingQueue = 0;
+    private int m_CurrentServingQueue = 0;
 
     // Results
     private int m_FinalHealthy;
@@ -67,7 +71,7 @@ public class StoreSimulation : MonoBehaviour
 
     void Awake()
     {
-        Debug.Assert(NumberOfCountersOpen <= Registers.Length, 
+        Debug.Assert(NumberOfCountersOpen <= Registers.Length,
             "Number of counters to be left open needs to be less than equal to total number of counters");
         InitializeRegisters();
         InitWaypoints();
@@ -78,7 +82,7 @@ public class StoreSimulation : MonoBehaviour
     {
         if (m_RegistersQueues.Count > 0)
             m_RegistersQueues.Clear();
-        
+
         foreach (var register in Registers)
         {
             register.gameObject.SetActive(false);
@@ -326,8 +330,44 @@ public class StoreSimulation : MonoBehaviour
         // length, we need to adjust the probability.
         //   prob = 1 - (1-probPerFrame)^(1/deltaTime)
         // so
+
+        // switch case to alter prob value based on space type
+        switch (SpaceType)
+        {
+            case "Inside (Well Ventilated)":
+                break;
+            case "Inside (Poorly Ventilated)":
+                //increase probability if space is inside and poorly ventilated
+                prob = prob * 2;
+                break;
+            case "Outside":
+                //reduce probability if space is outside
+                prob = (prob / 100) * 10;
+                break;
+        }
+
+        //if masks is ticked, reduce probability of exposure
+        if (Masks)
+        {
+            prob = (prob / 100) * 49;
+        }
+
+        //if vaccine is ticked, reduce probability of exposure
+        if (Vaccine)
+        {
+            prob = (prob / 100) * 51;
+        }
+
         var probPerFrame = 1.0f - Mathf.Pow(1.0f - prob, Time.deltaTime);
-        return UnityEngine.Random.value < probPerFrame;
+        //if probability is too high, return true, else return prob calculation
+        if (float.IsNaN(probPerFrame))
+        {
+            return true;
+        }
+        else
+        {
+            return UnityEngine.Random.value < probPerFrame;
+        }
     }
 
     void MoveQueue()
@@ -399,5 +439,18 @@ public class StoreSimulation : MonoBehaviour
         m_RegistersQueues.Clear();
         InitializeRegisters();
         InitWaypoints();
+    }
+
+    public bool durationCheck(float secondsSinceStart)
+    {
+        float durationInSeconds = Duration * 60;
+        if (secondsSinceStart > durationInSeconds)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
