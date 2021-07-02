@@ -16,16 +16,19 @@ public class StoreSimGui : MonoBehaviour
     public Slider maxTransmissionDistanceSlider;
     public Slider transmissionProbAtZeroDistanceSlider;
     public Slider transmissionProbAtMaxDistanceSlider;
+    public Slider durationSlider;
     public Slider numberOfRegistersSlider;
     public Slider shopperMovementSpeedSlider;
     public Slider minTransactionTimeSlider;
     public Slider maxTransactionTimeSlider;
     public Slider timeScaleSlider;
+    public Dropdown spaceDropdown;
 
     public TMP_Text numShoppersText;
     [FormerlySerializedAs("numContagiousText")]
     public TMP_Text numInfectiousText;
     public TMP_Text maxTransmissionDistanceText;
+    public TMP_Text durationText;
     public TMP_Text transmissionProbAtZeroDistanceText;
     public TMP_Text transmissionProbAtMaxDistanceText;
     public TMP_Text transmissionProbAtMaxDistanceLabel;
@@ -36,6 +39,8 @@ public class StoreSimGui : MonoBehaviour
     public TMP_Text timeScaleText;
 
     public Toggle oneWayAislesToggle;
+    public Toggle masksToggle;
+    public Toggle vaccineToggle;
 
     public TMP_Text healthyCustomersText;
     public TMP_Text exposedCustomersText;
@@ -45,8 +50,8 @@ public class StoreSimGui : MonoBehaviour
     float meterToFoot = 3.28084f;
     float footToMeter = 0.3048f;
     string transmissionProbAtMaxDistanceLabelText = "Exposure Probability at {0} ft";
-    string healthyCustomerCountLabelText = "Number of Healthy Shoppers: {0}";
-    string exposedCustomerCountLabelText = "Number of Exposed Shoppers: {0}";
+    string healthyCustomerCountLabelText = "Number of Healthy People: {0}";
+    string exposedCustomerCountLabelText = "Number of Exposed People: {0}";
     string exposedPercentageLabelText = "Percent Exposed: {0}%";
     string runtimeLabelText = "Running Time: {0} seconds";
 
@@ -57,14 +62,18 @@ public class StoreSimGui : MonoBehaviour
 
     int numShoppers;
     int numInfectious;
+    float duration;
     float maxTransmissionDistance;
     float exposureProbMinDistance;
     float exposureProbMaxDistance;
     int numberOfRegisters;
     bool oneWayAisles;
+    bool masks;
+    bool vaccine;
     float shopperMoveSpeed;
     float minTransactionTime;
     float maxTransactionTime;
+    string spaceType;
 
     bool isPaused = false;
     float timeScale = 0.0f;
@@ -77,14 +86,18 @@ public class StoreSimGui : MonoBehaviour
 
         numShoppers = storeSimulation.DesiredNumShoppers;
         numInfectious = storeSimulation.DesiredNumInfectious;
+        duration = storeSimulation.Duration;
         maxTransmissionDistance = storeSimulation.ExposureDistanceMeters * meterToFoot;
         exposureProbMinDistance = storeSimulation.ExposureProbabilityAtZeroDistance;
         exposureProbMaxDistance = storeSimulation.ExposureProbabilityAtMaxDistance;
         numberOfRegisters = storeSimulation.NumberOfCountersOpen;
         oneWayAisles = storeSimulation.OneWayAisles;
+        masks = storeSimulation.Masks;
+        vaccine = storeSimulation.Vaccine;
         shopperMoveSpeed = storeSimulation.ShopperSpeed;
         minTransactionTime = storeSimulation.MinPurchaseTime;
         maxTransactionTime = storeSimulation.MaxPurchaseTime;
+        spaceType = storeSimulation.SpaceType;
 
         numShoppersSlider.value = storeSimulation.DesiredNumShoppers;
         numShoppersText.text = storeSimulation.DesiredNumShoppers.ToString();
@@ -101,6 +114,8 @@ public class StoreSimGui : MonoBehaviour
         numberOfRegistersSlider.value = storeSimulation.NumberOfCountersOpen;
         numberOfRegistersText.text = storeSimulation.NumberOfCountersOpen.ToString();
         oneWayAislesToggle.isOn = storeSimulation.OneWayAisles;
+        masksToggle.isOn = storeSimulation.Masks;
+        vaccineToggle.isOn = storeSimulation.Vaccine;
         shopperMovementSpeedSlider.value = storeSimulation.ShopperSpeed;
         shopperMovementSpeedText.text = storeSimulation.ShopperSpeed.ToString("0.00");
         minTransactionTimeSlider.value = storeSimulation.MinPurchaseTime;
@@ -112,7 +127,8 @@ public class StoreSimGui : MonoBehaviour
         maxTransactionTimeSlider.maxValue = 10;
         maxTransactionTimeText.text = storeSimulation.MaxPurchaseTime.ToString("0.00");
         timeScaleSlider.value = Time.timeScale;
-        timeScaleText.text = Time.timeScale.ToString("0.00");
+        //Format Sim Speed to whole number, affix x to signify multiplier.
+        timeScaleText.text = Time.timeScale.ToString("0") + "x";
     }
 
     // Update is called once per frame
@@ -120,6 +136,7 @@ public class StoreSimGui : MonoBehaviour
     {
         secondsSinceStart += Time.deltaTime;
         UpdateTimeText();
+        durationReachedCheck();
     }
 
     public void ResetSim()
@@ -129,14 +146,18 @@ public class StoreSimGui : MonoBehaviour
         exposedCount = 0;
         storeSimulation.DesiredNumShoppers = numShoppers;
         storeSimulation.DesiredNumInfectious = numInfectious;
+        storeSimulation.Duration = duration;
         storeSimulation.ExposureDistanceMeters = maxTransmissionDistance * footToMeter;
         storeSimulation.ExposureProbabilityAtZeroDistance = exposureProbMinDistance;
         storeSimulation.ExposureProbabilityAtMaxDistance = exposureProbMaxDistance;
         storeSimulation.NumberOfCountersOpen = numberOfRegisters;
         storeSimulation.OneWayAisles = oneWayAisles;
+        storeSimulation.Masks = masks;
+        storeSimulation.Vaccine = vaccine;
         storeSimulation.ShopperSpeed = shopperMoveSpeed;
         storeSimulation.MinPurchaseTime = minTransactionTime;
         storeSimulation.MaxPurchaseTime = maxTransactionTime;
+        storeSimulation.SpaceType = spaceType;
         if (isPaused)
         {
             isPaused = false;
@@ -144,9 +165,11 @@ public class StoreSimGui : MonoBehaviour
         }
         UpdateExposurePercent();
         UpdateTimeText();
+        durationReachedCheck();
+        Time.timeScale = timeScaleSlider.value;
         storeSimulation.ResetSimulation();
         //SceneManager.LoadScene(0);
-        
+
     }
 
     public void OnNumShoppersChanged()
@@ -169,11 +192,18 @@ public class StoreSimGui : MonoBehaviour
         transmissionProbAtMaxDistanceLabel.text = string.Format(transmissionProbAtMaxDistanceLabelText, maxTransmissionDistanceSlider.value);
     }
 
+    public void OnDurationChanged()
+    {
+        duration = durationSlider.value;
+        //Format Duration to whole number, affix mins to signify minutes.
+        durationText.text = durationSlider.value.ToString("0") + "mins";
+    }
+
     public void OnTransmissionProbablityAtMinDistanceChanged()
     {
         exposureProbMinDistance = transmissionProbAtZeroDistanceSlider.value;
         transmissionProbAtZeroDistanceText.text = exposureProbMinDistance.ToString("0.00");
-        if(exposureProbMinDistance < transmissionProbAtMaxDistanceSlider.value)
+        if (exposureProbMinDistance < transmissionProbAtMaxDistanceSlider.value)
         {
             transmissionProbAtMaxDistanceSlider.value = exposureProbMinDistance;
         }
@@ -197,6 +227,15 @@ public class StoreSimGui : MonoBehaviour
         oneWayAisles = oneWayAislesToggle.isOn;
     }
 
+    public void OnMasksToggleChanged(bool val)
+    {
+        masks = masksToggle.isOn;
+    }
+    public void OnVaccineToggleChanged(bool val)
+    {
+        vaccine = vaccineToggle.isOn;
+    }
+
     public void OnShopperMovementSpeedChanged()
     {
         shopperMoveSpeed = shopperMovementSpeedSlider.value;
@@ -208,7 +247,7 @@ public class StoreSimGui : MonoBehaviour
         minTransactionTime = minTransactionTimeSlider.value;
         minTransactionTimeText.text = minTransactionTime.ToString("0.00");
         maxTransactionTimeSlider.minValue = minTransactionTime;
-        if(maxTransactionTimeSlider.value < minTransactionTime)
+        if (maxTransactionTimeSlider.value < minTransactionTime)
         {
             maxTransactionTimeSlider.value = minTransactionTime;
         }
@@ -221,7 +260,7 @@ public class StoreSimGui : MonoBehaviour
         if (maxTransactionTime > 0.1f)
         {
             minTransactionTimeSlider.maxValue = maxTransactionTime - 0.1f;
-            if(minTransactionTimeSlider.value >= maxTransactionTime)
+            if (minTransactionTimeSlider.value >= maxTransactionTime)
             {
                 minTransactionTimeSlider.value = maxTransactionTime;
             }
@@ -250,11 +289,11 @@ public class StoreSimGui : MonoBehaviour
     public void UpdateExposurePercent()
     {
         var exposedPercent = ((float)exposedCount / (float)(healthyCount + exposedCount)) * 100;
-        if(exposedCount == 0 && healthyCount == 0)
+        if (exposedCount == 0 && healthyCount == 0)
         {
             exposedPercent = 0;
         }
-        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0.00"));
+        exposedPercentageText.text = string.Format(exposedPercentageLabelText, exposedPercent.ToString("0"));
     }
 
     public void UpdateTimeText()
@@ -265,12 +304,20 @@ public class StoreSimGui : MonoBehaviour
     public void OnUpdateTimeScale(float newTimeScale)
     {
         Time.timeScale = timeScaleSlider.value;
-        timeScaleText.text = timeScaleSlider.value.ToString("0.00");
+        //Format Sim Speed to whole number, affix x to signify multiplier.
+        timeScaleText.text = timeScaleSlider.value.ToString("0") + "x";
+    }
+
+    public void OnSpaceDropdownChanged() 
+    {
+        int index = spaceDropdown.GetComponent<Dropdown>().value;
+        List<Dropdown.OptionData> dropdownOptions = spaceDropdown.GetComponent<Dropdown>().options;
+        spaceType = dropdownOptions[index].text;
     }
 
     public void OnMouseOverObject(string whichObj)
     {
-        
+
     }
 
     public void Pause()
@@ -278,12 +325,22 @@ public class StoreSimGui : MonoBehaviour
         isPaused = !isPaused;
         if (isPaused)
         {
+
             timeScale = Time.timeScale;
             Time.timeScale = 0;
         }
         else
         {
             Time.timeScale = timeScale;
+        }
+    }
+
+    public void durationReachedCheck()
+    {
+        if (storeSimulation.durationCheck(secondsSinceStart))
+        {
+            timeScale = Time.timeScale;
+            Time.timeScale = 0;
         }
     }
 }
