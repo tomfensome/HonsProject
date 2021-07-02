@@ -355,7 +355,7 @@ public class StoreSimulation : MonoBehaviour
         //if vaccine is ticked, reduce probability of exposure
         if (Vaccine)
         {
-            prob = (prob / 100) * 49;
+            prob = (prob / 100) * 51;
         }
 
         var probPerFrame = 1.0f - Mathf.Pow(1.0f - prob, Time.deltaTime);
