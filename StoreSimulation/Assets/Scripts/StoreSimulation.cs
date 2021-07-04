@@ -443,7 +443,9 @@ public class StoreSimulation : MonoBehaviour
 
     public bool durationCheck(float secondsSinceStart)
     {
+        //Convert the duration of the simulation to Second.
         float durationInSeconds = Duration * 60;
+        //if seconds since start passes the duration
         if (secondsSinceStart > durationInSeconds)
         {
             return true;
