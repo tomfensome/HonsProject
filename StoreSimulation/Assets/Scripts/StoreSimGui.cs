@@ -303,6 +303,7 @@ public class StoreSimGui : MonoBehaviour
 
     public void OnUpdateTimeScale(float newTimeScale)
     {
+        //update timescale to reflect slider value.
         Time.timeScale = timeScaleSlider.value;
         //Format Sim Speed to whole number, affix x to signify multiplier.
         timeScaleText.text = timeScaleSlider.value.ToString("0") + "x";
@@ -310,8 +311,11 @@ public class StoreSimGui : MonoBehaviour
 
     public void OnSpaceDropdownChanged() 
     {
+        //get index values of spaceDropDown
         int index = spaceDropdown.GetComponent<Dropdown>().value;
+        //Create list of options
         List<Dropdown.OptionData> dropdownOptions = spaceDropdown.GetComponent<Dropdown>().options;
+        //get text value of option at index
         spaceType = dropdownOptions[index].text;
     }
 
