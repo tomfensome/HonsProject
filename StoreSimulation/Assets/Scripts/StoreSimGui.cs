@@ -337,9 +337,12 @@ public class StoreSimGui : MonoBehaviour
 
     public void durationReachedCheck()
     {
+        //if the durationCheck returns true
         if (storeSimulation.durationCheck(secondsSinceStart))
         {
+            //get the timescale of the simulation
             timeScale = Time.timeScale;
+            //set the timescale to 0, stopping the simulation
             Time.timeScale = 0;
         }
     }
